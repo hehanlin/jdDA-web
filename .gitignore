@@ -61,4 +61,5 @@ migrations/
 .ipynb_checkpoints/
 
 # nodejs
-node_modules
+node_modules/
+dist/
