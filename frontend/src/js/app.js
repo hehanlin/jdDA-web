@@ -130,7 +130,7 @@ $(function() {
         success: function (data) {
             data = JSON.parse(data)
             $.each(data, function (i, e) {
-                $tagcloud.append("<a target='_blank' href='/analysis_category/?cat_id=" + e.cat_id + "'>" + e.name + "</a>");
+                $tagcloud.append("<a target='_blank' href='/analysis_good_list/?cat_id=" + e.cat_id + "'>" + e.name + "</a>");
             });
             tagcloud({
                 radius: 175,

@@ -22,5 +22,5 @@ urlpatterns = [
     path('', views.index),
     path('ping/', views.ping),
     path('category/', views.category),
-    path('analysis_category/', views.analysis_category)
+    path('analysis_good_list/', views.analysis_good_list)
 ]

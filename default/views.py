@@ -20,6 +20,7 @@ def category(request):
     return HttpResponse(json.dumps(res))
 
 
-def analysis_category(request):
+def analysis_good_list(request):
     cat_id = request.GET.get("cat_id", "9987,653,655")
-    return HttpResponse(str(cat_id))
+
+
