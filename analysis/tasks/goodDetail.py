@@ -5,7 +5,7 @@ import re
 import pandas as pd
 import jieba
 from collections import Counter
-from default.models import GoodDetail as Model
+from default.models import GoodDetail as Model, GoodDetailAnalysisResult as ResModel
 
 class GoodDetail(object):
 
@@ -59,24 +59,57 @@ class GoodDetail(object):
             pass
         try:
             self.d['all_top_nice_comment'], self.d['all_top_reply_comment'] = self.get_top_comment(thousand_comment)
+        except Exception as e:
+            print(e)
+        try:
+            self.d['poor_top_nice_comment'], self.d['poor_top_reply_comment'] = self.get_top_comment(poor_comment)
         except:
             pass
         try:
-            self.d['poor_top_nice_comment'], self.d['poor_top_nice_comment'] = self.get_top_comment(poor_comment)
+            self.d['img_top_nice_comment'], self.d['img_top_reply_comment'] = self.get_top_comment(img_comment)
         except:
             pass
         try:
-            self.d['img_top_nice_comment'], self.d['img_top_nice_comment'] = self.get_top_comment(img_comment)
+            self.d['after_top_nice_comment'], self.d['after_top_reply_comment'] = self.get_top_comment(after_comment)
         except:
             pass
         try:
-            self.d['after_top_nice_comment'], self.d['after_top_nice_comment'] = self.get_top_comment(after_comment)
+            self.d['general_top_nice_comment'], self.d['general_top_reply_comment'] = self.get_top_comment(general_comment)
         except:
             pass
         try:
-            self.d['general_top_nice_comment'], self.d['general_top_nice_comment'] = self.get_top_comment(general_comment)
+            self.set_buy_channel(thousand_comment)
         except:
             pass
+        try:
+            self.set_buy_color(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_buy_size(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_buy_province(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_buy_days(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_user_level(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_hour(thousand_comment)
+        except:
+            pass
+        try:
+            self.set_sell_time(thousand_comment)
+        except:
+            pass
+
 
 
     def set_comment_count(self):
@@ -115,10 +148,14 @@ class GoodDetail(object):
         comment = self._document.get(s)
         comment = pd.DataFrame(comment)
         comment.index = pd.to_datetime(comment['creationTime'])
-        del comment['creationTime']
         return comment
 
     def get_keyword_count(self, df: pd.DataFrame):
+        """
+        关键词摘要，生成词云
+        :param df:
+        :return:
+        """
         comment_content = df['content']
         comment_content = "".join(comment_content)
         wordlist_after_jieba = jieba.cut(comment_content)
@@ -130,13 +167,132 @@ class GoodDetail(object):
         return keyword_count_s.to_dict()
 
     def get_top_comment(self, df: pd.DataFrame):
-        nice_max = df.sort_values(['usefulVoteCount'], ascending=False).head(1)     # 点赞最高
-        reply_max = df.sort_values(['replyCount'], ascending=False).head(1)     # 回复最多
+        """
+        提取最受关注的评论
+        :param df:
+        :return:
+        """
+        nice_max = df.sort_values(
+            ['usefulVoteCount'], ascending=False
+        ).head(1)[['usefulVoteCount', 'content']].to_dict(orient='records')[0]   # 点赞最高
+        reply_max = df.sort_values(
+            ['replyCount'], ascending=False
+        ).head(1)[['replyCount', 'content']].to_dict(orient='records')[0]    # 回复最多
         return nice_max, reply_max
 
-def main(good_id=None):
-    print(GoodDetail(Model().get(good_id or '6029342')))
+    def set_buy_channel(self, df: pd.DataFrame):
+        """
+        购买渠道分析
+        :param df:
+        :return:
+        """
+        obj = df['userClientShow']
+        obj = obj.value_counts()
+        obj = obj.rename({'': '来自京东网页端'})
+        self.d['buy_channel'] = obj.to_dict()
+        obj = df['isMobile']
+        obj = obj.value_counts()
+        obj = obj.rename({1: '移动端', 0: 'PC'})
+        self.d['is_mobile'] = obj.to_dict()
+
+    def set_buy_color(self, df: pd.DataFrame):
+        """
+        购买属性分析
+        :param df:
+        :return:
+        """
+        obj = df['productColor']
+        obj = obj.value_counts()
+        self.d['buy_color'] = obj.to_dict()
+
+    def set_buy_size(self, df: pd.DataFrame):
+        """
+        购买配置分析
+        :param df:
+        :return:
+        """
+        obj = df['productSize']
+        obj = obj.value_counts()
+        self.d['buy_size'] = obj.to_dict()
+
+    def set_buy_province(self, df: pd.DataFrame):
+        """
+        购买者的地域分析
+        :return:
+        """
+        obj = df['userProvince']
+        obj = obj.value_counts()
+        obj = obj.rename({"": "用户不授权地理位置"})
+        self.d['buy_province'] = obj.to_dict()
+
+    def set_buy_days(self, df: pd.DataFrame):
+        """
+        购买后的多少天评价
+        :return:
+        """
+        obj = df['days'].value_counts().sort_index()
+        if len(obj.index) > 20:
+            value = obj[obj.index >= 20].sum()
+            obj = obj.drop(obj[obj.index > 20].index)
+            obj.values[-1] += value
+        obj.index = [
+            str(each) + "天" for each in obj.index
+        ]
+        obj = obj.rename({'0天': "当天"})
+        if len(obj.index) > 20:
+            obj = obj.rename({"20天": "20天后"})
+        self.d['buy_days'] = obj.to_dict()
+
+    def set_user_level(self, df: pd.DataFrame):
+        """
+        用户等级分析
+        :param df:
+        :return:
+        """
+        obj = df['userLevelName']
+        obj = obj.value_counts()
+        self.d['user_level'] = obj.to_dict()
+
+    def set_hour(self, df: pd.DataFrame):
+        """
+        24小时分布
+        :param df:
+        :return:
+        """
+        obj = df['creationTime']
+        obj = pd.DatetimeIndex(obj).hour.value_counts().sort_index()
+        obj.index = [
+            str(each) + "时" for each in obj.index
+        ]
+        self.d['comment_hour'] = obj.to_dict()      # 评论时间
+        obj = df['referenceTime']
+        obj = pd.DatetimeIndex(obj).hour.value_counts().sort_index()
+        obj.index = [
+            str(each) + "时" for each in obj.index
+        ]
+        self.d['buy_hour'] = obj.to_dict()      # 购买时间
+
+    def set_sell_time(self, df: pd.DataFrame):
+        """
+        分析每月商品购买数量与评论数量
+        :param df:
+        :return:
+        """
+        obj = pd.Series(index=pd.DatetimeIndex(df['creationTime']), data=1)
+        obj = obj.resample("M").sum().fillna(0)
+        obj.index = obj.index.to_datetime().strftime("%Y-%m")
+        self.d['sell_comment_month'] = obj.to_dict()     # 评论数量
+        obj = pd.Series(index=pd.DatetimeIndex(df['referenceTime']), data=1)
+        obj = obj.resample("M").sum().fillna(0)
+        obj.index = obj.index.to_datetime().strftime("%Y-%m")
+        self.d['sell_buy_month'] = obj.to_dict()        # 购买数量
+
+
+def main(good_id):
+    res = GoodDetail(Model().get(good_id)).d
+    res['_id'] = good_id
+    ResModel().save(res)
 
 
 if __name__ == '__main__':
-    main()
+    main('6029342')

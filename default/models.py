@@ -40,12 +40,19 @@ class GoodDetail(BaseModel):
         return self.collection.find_one(filter={'_id': id})
 
 
-class GoodListAnalysisResult(BaseModel):
-    collection_name = 'good_list_analsis_result'
+class BaseANalysisResult(BaseModel):
 
-    def is_done(self, cat_id):
-        old_analysis_result = self.collection.find_one({"_id": cat_id})
+    def is_done(self, _id):
+        old_analysis_result = self.collection.find_one({"_id": _id})
         return old_analysis_result if old_analysis_result else None
 
-    def being_analysis(self, cat_id):
-        pass
+    def save(self, document):
+        return self.collection.save(document)
+
+
+class GoodListAnalysisResult(BaseANalysisResult):
+    collection_name = 'good_list_analsis_result'
+
+
+class GoodDetailAnalysisResult(BaseANalysisResult):
+    collection_name = 'good_detail_analsis_result'
