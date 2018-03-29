@@ -32,6 +32,21 @@ class Category(BaseModel):
             "cat_id": 1
         }))
 
+    def search(self, q):
+        return list(self.collection.find({
+            "$text": {
+                "$search": q
+            },
+            "is_list": True,
+            "level": 3
+        }, {
+            "_id": 0,
+            "name": 1,
+            "path": 1,
+            "url": 1,
+            "cat_id": 1
+        }).limit(10))
+
 
 class GoodDetail(BaseModel):
     collection_name = 'good_detail'

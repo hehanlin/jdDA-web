@@ -22,5 +22,8 @@ urlpatterns = [
     path('', views.index),
     path('ping/', views.ping),
     path('category/', views.category),
-    path('analysis_good_list/', views.analysis_good_list)
+    path('good_list/', views.good_list),
+    path('good_detail/', views.good_detail),
+    path('search/', views.search),
+    path('good_ana_res/', views.good_ana_res)
 ]

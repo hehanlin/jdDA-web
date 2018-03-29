@@ -66,7 +66,7 @@ DATABASES = {
     }
 }
 
-MONGO_URI = "mongodb://localhost:27017"
+MONGO_URI = "mongodb://zc.hehanlin.cn:27018"
 MONGO_DB = "jdDA"
 
 
@@ -97,5 +97,9 @@ USE_TZ = True
 STATIC_URL = '/frontend/dist/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/dist/")
+    os.path.join(BASE_DIR, "frontend/dist/"),
 ]
+
+SCRAPYD_URL = 'http://zc.hehanlin.cn:6800/'
+SCRAPYD_PROJECT = "spider"
+GOOD_DETAIL_START_URL = "http://item.jd.com/%s.html"

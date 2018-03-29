@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from analysis.celery_app import celery_app
 import re
 import pandas as pd
 import jieba

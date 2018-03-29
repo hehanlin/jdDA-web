@@ -11,7 +11,10 @@ module.exports = {
         // 输入
         app: ['./src/js/app'],
         // 第三方库modules单独打包, 填入modules名即可
-        lib: ['./src/js/jquery.min', './src/js/tagcloud.min']
+        lib: ['./src/js/jquery.min', './src/js/tagcloud.min'],
+        // result
+        res: ['./src/js/res'],
+        resLib: ['./src/js/jquery.min', './src/js/stopExecutionOnTimeout']
     },
     output: {
         // 输出
@@ -35,6 +38,13 @@ module.exports = {
             // chunks表示要引用entry里面的入口
             chunks: ['app', 'lib'],
             // script插入的标签
+            inject: 'body'
+        }),
+        // 输出result.html
+        new HtmlPlugin({
+            template: './src/result.html',
+            filename: './result.html',
+            chunks: ['res', 'resLib'],
             inject: 'body'
         }),
         // 输出css (link标签方式插入)
@@ -66,7 +76,7 @@ module.exports = {
         },  {
             // 字体
             // run `npm install url-loader --save-dev` before
-            test: /\.(eot|woff|woff2|ttf|svg)$/, loader: 'url', query: { limit: 10240, prefix: 'font/', name: 'font/[name].[ext]?[hash:8]' }
+            test: /\.(eot|woff|woff2|ttf|svg)/, loader: 'url', query: { limit: 10240, prefix: 'font/', name: 'font/[name].[ext]?[hash:8]' }
         },  {
             // JSON
             // run `npm install json-loader --save-dev` before
@@ -74,7 +84,7 @@ module.exports = {
         }],
         resolve: {
             extensions: ['', '.js', '.json']
-            // require('./main') <=> require('./main.js')
+            // require('./main') <=> require('./res.js')
         }
     }
 };

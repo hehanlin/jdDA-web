@@ -1,4 +1,4 @@
-@import './templates/templates.css';
+@import '../sideBox/templates.css';
 *{
 	padding: 0;
 	margin: 0;
