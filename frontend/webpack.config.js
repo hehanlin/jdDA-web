@@ -14,7 +14,7 @@ module.exports = {
         lib: ['./src/js/jquery.min', './src/js/tagcloud.min'],
         // result
         res: ['./src/js/res'],
-        resLib: ['./src/js/jquery.min', './src/js/stopExecutionOnTimeout']
+        resLib: ['./src/js/jquery.min', './src/js/stopExecutionOnTimeout', 'echarts', 'echarts-liquidfill']
     },
     output: {
         // 输出
@@ -28,6 +28,12 @@ module.exports = {
             name: "lib",
             filename: "js/lib.js?[chunkhash:8]",
             chunks: ["app", "lib"]
+        }),
+
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "resLib",
+            filename: "js/resLib.js?[chunkhash:8]",
+            chunks: ["res", "resLib"]
         }),
         // 输出index.html
         new HtmlPlugin({

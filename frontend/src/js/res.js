@@ -179,6 +179,7 @@ $(document).ready(function () {
         'url': "/good_ana_res/?good_id=" + GetQueryString("good_id"),
         'dataType': 'json',
         'success': function(data) {
+            $("#name").html(data.name);
             mychart(data);
         }
     })
