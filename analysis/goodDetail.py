@@ -13,6 +13,7 @@ class GoodDetail(object):
         self._document = document
         self.d = dict()
         self.d['name'] = self._document.get('name', '尚未找到商品名称')
+        self.d['img'] = self._document.get('img', '尚未找到商品图片')
         self.d['url'] = self._document.get('url', '尚未找到商品url')
         self.d['comment_count'] = self.set_comment_count()  # 评价总数
         self._cs_s = pd.Series(
@@ -289,6 +290,7 @@ class GoodDetail(object):
 def main(good_id):
     res = GoodDetail(Model().get(good_id)).d
     res['_id'] = good_id
+    res['hot'] = 1
     ResModel().save(res)
 
 

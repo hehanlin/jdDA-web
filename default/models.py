@@ -14,7 +14,6 @@ class BaseModel(object):
         else:
             self.collection = self.db[self.collection_name]
 
-
     def __del__(self):
         self.client.close()
 
@@ -25,12 +24,19 @@ class Category(BaseModel):
     def get_category_three(self):
         return list(self.collection.find({
             "is_list": True,
-            "level": 3
+            "level": 3,
+            "cat_id": {"$ne": None}
         }, {
             "_id": 0,
             "name": 1,
             "cat_id": 1
-        }))
+        }).sort("hot", pymongo.DESCENDING).limit(50))
+
+    def inc_hot(self, cat_id):
+        return self.collection.update({
+            "cat_id": cat_id
+        }, {"$inc": {"hot": 1}}
+        )
 
     def search(self, q):
         return list(self.collection.find({
@@ -51,8 +57,15 @@ class Category(BaseModel):
 class GoodDetail(BaseModel):
     collection_name = 'good_detail'
 
-    def get(self, id):
-        return self.collection.find_one(filter={'_id': id})
+    def get(self, _id):
+        return self.collection.find_one(filter={'_id': _id})
+
+
+class GoodList(BaseModel):
+    collection_name = 'good_list'
+
+    def get(self, _id):
+        return self.collection.find_one(filter={'_id': _id})
 
 
 class BaseANalysisResult(BaseModel):
@@ -71,3 +84,28 @@ class GoodListAnalysisResult(BaseANalysisResult):
 
 class GoodDetailAnalysisResult(BaseANalysisResult):
     collection_name = 'good_detail_analsis_result'
+
+    def inc_hot(self, _id):
+        return self.collection.update({
+            "_id": _id
+        }, {"$inc": {"hot": 1}}
+        )
+
+    def get_top_ana(self):
+        return list(self.collection.find({}, {
+            "_id": 1,
+            "name": 1
+        }).sort("hot", pymongo.DESCENDING).limit(8))
+
+
+class SpiderTask(BaseModel):
+    collection_name = "spider_task"
+
+    def save(self, document: dict):
+        return self.collection.save(document)
+
+    def get(self, _id):
+        return self.collection.find_one(filter={"_id": _id})
+
+    def delete(self, _id):
+        return self.collection.delete_one({"_id": _id})

@@ -103,3 +103,4 @@ STATICFILES_DIRS = [
 SCRAPYD_URL = 'http://zc.hehanlin.cn:6800/'
 SCRAPYD_PROJECT = "spider"
 GOOD_DETAIL_START_URL = "http://item.jd.com/%s.html"
+GOOD_LIST_START_URL = "http://list.jd.com/list.html?cat=%s"

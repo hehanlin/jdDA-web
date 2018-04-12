@@ -1,4 +1,5 @@
 (function(){
+    var $ = require("../js/jquery.min");
     /* side-box */
     var title_btn = document.querySelector("#_cqupt-title"),
         side = document.querySelector("#_cqupt-side-box");
@@ -32,18 +33,16 @@
         side.classList.add('_cqupt-close');
     };
 
-    // 热门排行
-    // (function(data){
-    //     var html = '<tbody>';
-    //     for(var i = 0; i < data.length; i++){
-    //         html += '<tr>';
-    //         html += '<td>' + data[i].user_id +'</td>';
-    //         html += '<td>' + data[i].user_name +'</td>';
-    //         html += '<td>' + data[i].time +'</td>';
-    //         html += '<td>' + data[i].money +'</td>';
-    //         html += '</tr>';
-    //     }
-    //     html += '</tbody>';
-    //     document.querySelector("._cqupt-donate-list").insertAdjacentHTML("afterbegin", html);
-    // })(require('../../json/donate'));
+    $.ajax({
+        'type': "GET",
+        'url': "/top_ana_detail/",
+        'dataType': 'json',
+        'success': function(data) {
+            for(var i=0; i<data.length; i++) {
+                $("._cqupt-nav-list").append(
+                    "<a class=\"_cqupt-nav-item-o\" href=\"/good_detail/?good_id="+ data[i]._id +"\" target=\"_blank\">"+ data[i].name +"</a>"
+                )
+            }
+        }
+    })
 })();

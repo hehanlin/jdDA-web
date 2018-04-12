@@ -510,7 +510,7 @@ html, body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 1025px) {
+@media screen and (max-width: 1600px) {
     .section-heading {
         display: none !important;
     }
@@ -738,4 +738,20 @@ html, body {
 
 #qrcode > img {
     width: 390px;
+}
+
+#shop-img-div {
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    margin:auto;
+    width: 450px;
+    height: 450px;
+}
+
+#shop-img {
+    width: 450px;
+    height: 450px;
 }

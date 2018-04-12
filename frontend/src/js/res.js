@@ -180,6 +180,8 @@ $(document).ready(function () {
         'dataType': 'json',
         'success': function(data) {
             $("#name").html(data.name);
+            $("#shop-img").attr('src', data.img);
+            $("#shop-img").attr('alt', data.img);
             mychart(data);
         }
     })

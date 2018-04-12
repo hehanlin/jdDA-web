@@ -14,7 +14,9 @@ module.exports = {
         lib: ['./src/js/jquery.min', './src/js/tagcloud.min'],
         // result
         res: ['./src/js/res'],
-        resLib: ['./src/js/jquery.min', './src/js/stopExecutionOnTimeout', 'echarts', 'echarts-liquidfill']
+        resLib: ['./src/js/jquery.min', './src/js/stopExecutionOnTimeout', 'echarts', 'echarts-liquidfill'],
+        // good_list
+        good_list: ['./src/js/good_list']
     },
     output: {
         // 输出
@@ -52,6 +54,13 @@ module.exports = {
             filename: './result.html',
             chunks: ['res', 'resLib'],
             inject: 'body'
+        }),
+        // 输出 good_list.html
+        new HtmlPlugin({
+           template: './src/good_list.html',
+           filename: './good_list.html',
+           chunks: ['good_list'],
+           inject: 'body'
         }),
         // 输出css (link标签方式插入)
         new ExtractTextPlugin('css/[name].css?[contenthash:8]'),

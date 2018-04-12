@@ -25,5 +25,8 @@ urlpatterns = [
     path('good_list/', views.good_list),
     path('good_detail/', views.good_detail),
     path('search/', views.search),
-    path('good_ana_res/', views.good_ana_res)
+    path('good_ana_res/', views.good_ana_res),
+    path('good_list/', views.good_list),
+    path('list_ana_res/', views.list_ana_res),
+    path('top_ana_detail/', views.top_ana_detail)
 ]
