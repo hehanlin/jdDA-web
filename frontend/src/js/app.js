@@ -114,14 +114,22 @@ $(function () {
         more.show();
         var main_input_val = $.trim(main_input.val());
         console.log(main_input_val);
-        var reg = /item\.jd\.com\/(\d+).html/gi;
-        res = reg.exec(main_input_val);
-        if(res==null) {
-            window.alert("商品链接格式错误，请重新输入，如：https://item.jd.com/1030106527.html");
-            main_input.val("");
-            return false;
+
+        var good_reg = /item\.jd\.com\/(\d+).html/gi;
+        var cate_reg = /list\.jd\.com\/list\.html\?cat=([\d,]+)/gi;
+        var gres = good_reg.exec(main_input_val);
+        if(gres!=null) {
+            window.open("/good_detail/?good_id="+gres[1]);
+            return true;
         }
-        window.open("/good_detail/?good_id="+res[1]);
+        var cres = cate_reg.exec(main_input_val);
+        if(cres!=null) {
+            window.open("/good_list/?cat_id="+cres[1]);
+            return true;
+        }
+        window.alert("链接格式错误，请重新输入，如：https://item.jd.com/1030106527.html");
+        main_input.val("");
+        return false;
     });
     //读取json数据，顶部悬浮提醒框warn文本及tagList快捷链接
     $.ajax({

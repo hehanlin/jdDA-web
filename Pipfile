@@ -9,6 +9,7 @@ pymongo = "*"
 pandas = "*"
 jieba = "*"
 python-scrapyd-api = "*"
+gunicorn = "*"
 
 [dev-packages]
 
