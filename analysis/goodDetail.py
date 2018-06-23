@@ -27,57 +27,29 @@ class GoodDetail(object):
         # tc_time_comments_size.index = tc_time_comments_size.index.to_datetime().strftime("%Y-%m-%d")
         # self.d['everyday_comment_size'] = tc_time_comments_size.to_dict()   # 每日评论数统计
         histogram_score = thousand_comment.groupby('score').size()
-        histogram_score.index = ['1星', '2星', '3星', '4星', '5星']
+        histogram_score.index = [str(x)+"星" for x in histogram_score.index]
         self.d['histogram_score'] = histogram_score.to_dict()   # 星级分布
-        keyword_of_summary = document['comment_desc'].get('hotCommentTagStatistics')
-        keyword_of_summary = pd.DataFrame(keyword_of_summary)[['name', 'count']]
-        keyword_of_summary.index = keyword_of_summary['name']
-        del keyword_of_summary['name']
         try:
-            self.d['keyword_of_summary'] = keyword_of_summary.to_dict()['count']     # 官方关键字摘要
+            keyword_of_summary = document['comment_desc'].get('hotCommentTagStatistics')
+            keyword_of_summary = pd.DataFrame(keyword_of_summary)[['name', 'count']]
+            keyword_of_summary.index = keyword_of_summary['name']
+            self.d['keyword_of_summary'] = keyword_of_summary.to_dict()['count']  # 官方关键字摘要
         except:
-            pass
-        # try:
-        #     self.d['thousand_keyword'] = self.get_keyword_count(thousand_comment)  # 前一千条关键字摘要
-        #     general_comment = self.get_comments_df('general_comments')
-        #     self.d['general_keyword'] = self.get_keyword_count(general_comment)     # 中评摘要
-        # except:
-        #     pass
+            self.d['keyword_of_summary'] = self.get_keyword_count(thousand_comment)  # 前一千条关键字摘要
+
         try:
             poor_comment = self.get_comments_df('poor_comments')
             self.d['poor_keyword'] = self.get_keyword_count(poor_comment)       # 差评摘要
         except:
-            pass
-        # try:
-        #     img_comment = self.get_comments_df('poor_comments')
-        #     self.d['img_keyword'] = self.get_keyword_count(img_comment)        # 有图摘要
-        # except:
-        #     pass
-        # try:
-        #     after_comment = self.get_comments_df('after_comments')
-        #     self.d['after_comment'] = self.get_keyword_count(after_comment)     # 追评摘要
-        # except:
-        #     pass
+            self.d['poor_keyword'] = {'评论尚未形成有效摘要': 1}
         try:
             self.d['all_top_nice_comment'], self.d['all_top_reply_comment'] = self.get_top_comment(thousand_comment)
-        except Exception as e:
-            print(e)
+        except:
+            pass
         try:
             self.d['poor_top_nice_comment'], self.d['poor_top_reply_comment'] = self.get_top_comment(poor_comment)
         except:
             pass
-        # try:
-        #     self.d['img_top_nice_comment'], self.d['img_top_reply_comment'] = self.get_top_comment(img_comment)
-        # except:
-        #     pass
-        # try:
-        #     self.d['after_top_nice_comment'], self.d['after_top_reply_comment'] = self.get_top_comment(after_comment)
-        # except:
-        #     pass
-        # try:
-        #     self.d['general_top_nice_comment'], self.d['general_top_reply_comment'] = self.get_top_comment(general_comment)
-        # except:
-        #     pass
         try:
             self.set_buy_channel(thousand_comment)
         except:
@@ -295,4 +267,4 @@ def main(good_id):
 
 
 if __name__ == '__main__':
-    main('6029342')
+    main('6946605')

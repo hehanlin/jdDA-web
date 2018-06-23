@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
+import numpy as np
 from default.models import GoodList as Model, GoodListAnalysisResult as ResModel
 
 
@@ -18,7 +19,7 @@ class GoodList(object):
         self.d['title'] = self.top_goods_df['title'].tolist()
         self.top_goods_df['commit_num'] = self.top_goods_df['commit_num'].apply(self.replace_commit_num)
         self.d['commit_num'] = self.top_goods_df['commit_num'].tolist()
-        self.top_goods_df['price'] = self.top_goods_df['price'].fillna(0).astype(float)
+        self.top_goods_df['price'] = self.top_goods_df['price'].astype(np.float)
         self.d['price'] = self.top_goods_df['price'].tolist()
         self.top_goods_df['total_price'] = self.top_goods_df['commit_num'] * self.top_goods_df['price']
         self.d['total_price'] = self.top_goods_df['total_price'].tolist()

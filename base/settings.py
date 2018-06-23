@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nrav@+27-q!*)xvo!n9_nv#sb$21cfg86=i#^-@ro_zs20cfcb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['jd.hehanlin.cn', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -66,7 +66,7 @@ DATABASES = {
     }
 }
 
-MONGO_URI = "mongodb://zc.hehanlin.cn:27018"
+MONGO_URI = "mongodb://localhost:27018"
 MONGO_DB = "jdDA"
 
 
@@ -100,7 +100,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/dist/"),
 ]
 
-SCRAPYD_URL = 'http://zc.hehanlin.cn:6800/'
+SCRAPYD_URL = 'http://localhost:6800/'
 SCRAPYD_PROJECT = "spider"
 GOOD_DETAIL_START_URL = "http://item.jd.com/%s.html"
 GOOD_LIST_START_URL = "http://list.jd.com/list.html?cat=%s"
