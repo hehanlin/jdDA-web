@@ -81,7 +81,8 @@ class GoodDetail(object):
         try:
             self.set_sell_time(thousand_comment)
         except:
-            pass
+            self.d['sell_comment_month'] = {"尚未形成有效数据": 30}
+            self.d['sell_buy_month'] = {"尚未形成有效数据": 30}
 
     def set_comment_count(self):
         """
