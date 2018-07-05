@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nrav@+27-q!*)xvo!n9_nv#sb$21cfg86=i#^-@ro_zs20cfcb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,9 +96,12 @@ USE_TZ = True
 
 STATIC_URL = '/frontend/dist/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/dist/"),
-]
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "frontend/dist/"),
+#]
+STATIC_ROOT = os.path.join(BASE_DIR, "frontend/dist/")
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 SCRAPYD_URL = 'http://localhost:6800/'
 SCRAPYD_PROJECT = "spider"

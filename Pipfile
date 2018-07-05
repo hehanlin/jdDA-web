@@ -10,6 +10,7 @@ pandas = "*"
 jieba = "*"
 python-scrapyd-api = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
